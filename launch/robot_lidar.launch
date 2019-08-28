@@ -1,0 +1,16 @@
+<launch>
+	<arg name="robot_name" default=""/>
+    <!-- config param -->
+    <arg name="pub_imu"       default="False" />
+    <arg name="sub_ackermann"       default="False" />
+
+    <include file="$(find base_control)/launch/base_control.launch">
+        <arg name="robot_name"            value="$(arg robot_name)"/>    
+        <arg name="pub_imu"            value="$(arg sub_ackermann)"/>  
+        <arg name="sub_ackermann"            value="$(arg sub_ackermann)"/>  
+        
+    </include>
+    <include file="$(find multi_robot)/launch/lidar.launch">
+        <arg name="robot_name"            value="$(arg robot_name)"/>
+    </include>
+</launch>

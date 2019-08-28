@@ -1,0 +1,33 @@
+<launch>
+  <!-- Arguments -->
+  <arg name="robot_name" default=""/>   <!-- support multi robot -->
+  <arg name="map_file" default="$(find robot_navigation)/maps/map.yaml"/>
+  <arg name="simulation" default= "false"/> 
+  <arg name="planner"  default="dwa" doc="opt: dwa, teb"/> 
+  <arg name="open_rviz" default="false"/>
+  <param name="/use_sim_time" value="$(arg simulation)"/>
+  
+  <group unless="$(arg simulation)">
+    <!-- robot with lidar -->
+    <include file="$(find multi_robot)/launch/robot_lidar.launch">
+      <arg name="robot_name"            value="$(arg robot_name)"/>
+    </include>
+    <!-- AMCL -->
+    <include file="$(find multi_robot)/launch/amcl.launch">
+      <arg name="robot_name"            value="$(arg robot_name)"/>
+    </include>
+  </group>
+
+  <!-- move_base -->
+  <include file="$(find multi_robot)/launch/move_base.launch">
+    <arg name="planner"            value="$(arg planner)"/>
+    <arg name="robot_name"            value="$(arg robot_name)"/>
+  </include>
+
+  <!-- rviz -->
+  <group if="$(arg open_rviz)"> 
+    <node pkg="rviz" type="rviz" name="rviz" required="true"
+          args="-d $(find robot_navigation)/rviz/navigation.rviz"/>
+  </group>
+
+</launch>

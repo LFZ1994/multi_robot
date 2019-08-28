@@ -1,0 +1,17 @@
+<launch>
+    <arg name="robot_name" default=""/>   <!-- support multi robot -->
+    <!--  ************** Localization **************  -->
+    <group ns="$(arg robot_name)">
+        <node pkg="amcl" type="amcl" name="amcl" output="screen">
+            <rosparam file="$(find multi_robot)/param/$(env BASE_TYPE)/amcl_params.yaml" command="load" />
+            <param name="initial_pose_x"            value="1.0"/>
+            <param name="initial_pose_y"            value="1.0"/>
+            <param name="initial_pose_a"            value="0.0"/>
+            <param name="odom_frame_id" value="$(arg robot_name)/odom"/>
+            <param name="base_frame_id" value="$(arg robot_name)/base_footprint"/>
+            <remap from="/$(arg robot_name)/map" to="/map" />
+        </node>
+    </group>
+</launch>
+
+
