@@ -10,7 +10,7 @@
 
   <!-- move_base use DWA planner-->
   <group ns="$(arg robot_name)">
-    <param name="tf_prefix" value="$(arg robot_name)" />
+    <!--<param name="tf_prefix" value="$(arg robot_name)" />-->
     <group if="$(eval planner == 'dwa')">
       <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
         <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
@@ -24,9 +24,9 @@
         <remap from="odom" to="$(arg odom_topic)"/>
         <!-- reset frame_id parameters using user input data -->
         <param name="global_costmap/global_frame" value="$(arg global_frame_id)"/>
-        <param name="global_costmap/robot_base_frame" value="$(arg base_frame_id)"/>
-        <param name="local_costmap/global_frame" value="$(arg odom_frame_id)"/>
-        <param name="local_costmap/robot_base_frame" value="$(arg base_frame_id)"/>
+        <param name="global_costmap/robot_base_frame" value="$(arg robot_name)/$(arg base_frame_id)"/>
+        <param name="local_costmap/global_frame" value="$(arg robot_name)/$(arg odom_frame_id)"/>
+        <param name="local_costmap/robot_base_frame" value="$(arg robot_name)/$(arg base_frame_id)"/>
         <!--<param name="DWAPlannerROS/global_frame_id" value="$(arg odom_frame_id)"/>-->
         <remap from="map" to="/map" />
       </node>
@@ -45,9 +45,9 @@
         <remap from="odom" to="$(arg odom_topic)"/>
         <!-- reset frame_id parameters using user input data -->
         <!--<param name="global_costmap/global_frame" value="$(arg global_frame_id)"/>-->
-        <param name="global_costmap/robot_base_frame" value="$(arg base_frame_id)"/>
-        <param name="local_costmap/global_frame" value="$(arg odom_frame_id)"/>
-        <param name="local_costmap/robot_base_frame" value="$(arg base_frame_id)"/>
+        <param name="global_costmap/robot_base_frame" value="$(arg robot_name)/$(arg base_frame_id)"/>
+        <param name="local_costmap/global_frame" value="$(arg robot_name)/$(arg odom_frame_id)"/>
+        <param name="local_costmap/robot_base_frame" value="$(arg robot_name)/$(arg base_frame_id)"/>
         <!--<param name="DWAPlannerROS/global_frame_id" value="$(arg odom_frame_id)"/>-->
         <remap from="map" to="/map" />
       </node>
