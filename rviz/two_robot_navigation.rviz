@@ -7,8 +7,8 @@ Panels:
         - /TF1/Frames1
         - /TF1/Tree1
         - /Global Map1/Costmap1
-        - /Robot_01/Polygon1
-        - /Robot_11/Polygon1
+        - /Robot_0/Polygon1
+        - /Robot_1/Polygon1
       Splitter Ratio: 0.5
     Tree Height: 721
   - Class: rviz/Selection
@@ -213,7 +213,7 @@ Visualization Manager:
           Size (Pixels): 3
           Size (m): 0.0399999991
           Style: Flat Squares
-          Topic: robot1/move_base/DWAPlannerROS/trajectory_cloud
+          Topic: robot_1/move_base/DWAPlannerROS/trajectory_cloud
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: false

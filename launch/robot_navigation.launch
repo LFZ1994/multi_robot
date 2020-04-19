@@ -1,7 +1,6 @@
 <launch>
   <!-- Arguments -->
   <arg name="robot_name" default=""/>   <!-- support multi robot -->
-  <arg name="map_file" default="$(find robot_navigation)/maps/map.yaml"/>
   <arg name="simulation" default= "false"/> 
   <arg name="planner"  default="dwa" doc="opt: dwa, teb"/> 
   <arg name="open_rviz" default="false"/>
@@ -27,7 +26,7 @@
   <!-- rviz -->
   <group if="$(arg open_rviz)"> 
     <node pkg="rviz" type="rviz" name="rviz" required="true"
-          args="-d $(find robot_navigation)/rviz/navigation.rviz"/>
+          args="-d $(find multi_robot)/rviz/two_robot_navigation.rviz"/>
   </group>
 
 </launch>
