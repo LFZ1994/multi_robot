@@ -52,7 +52,7 @@ class single_dance:
         self.odom_sub = rospy.Subscriber(self.odom_cmd_topic_name, Odometry, self.odom_callback, queue_size=1)
 
     def thread(self):
-        loop_rate = rospy.Rate(50)
+        loop_rate = rospy.Rate(100)
         # self.MovementStraight(0.2)
         while not rospy.is_shutdown():
             if self.current_stage_of_dance != self.StateOfDance.idle.value:
@@ -87,6 +87,9 @@ class single_dance:
         Kp = 0.6
         Kd = 0.1
         angular_z = Kp * err_theta + Kd * (err_theta - self.lastError)
+        if angular_z != 0:
+            if abs(angular_z) < 0.1:
+                angular_z = 0.1*abs(angular_z)/angular_z
         self.lastError = err_theta
         twist = Twist()
         twist.linear.x = 0
@@ -108,8 +111,8 @@ class single_dance:
             err_pos = math.sqrt((self.current_pos_x - self.start_pos_x) ** 2 + (self.current_pos_y - self.start_pos_y) ** 2) + self.desired_dist
         # rospy.loginfo("Parking_Straight")
         twist = Twist()
-        if abs(err_pos) > 0.001:
-            if self.desired_dist > 0.001:
+        if abs(err_pos) > 0.005:
+            if self.desired_dist > 0.0001:
                 twist.linear.x = -0.06*abs(err_pos)/err_pos
             else:
                 twist.linear.x = 0.06*abs(err_pos)/err_pos
@@ -148,6 +151,8 @@ class single_dance:
                     self.cmd_pub.publish(twist)
                     rospy.sleep(1)
                     self.movement_start = False 
+                else:
+                    print error
             if self.current_stage_of_dance == self.StateOfDance.Tunning.value:
                 if self.movement_start == False:
                     # rospy.loginfo("MovementTurn")
@@ -182,6 +187,22 @@ class dance:
         self.dance()
 
     def dance(self):
+        #turn to 0 degree
+        while True:
+            for i in range(self.robot_num):
+                if self.MovementDone == True:
+                    self.names['Dancer_%s'%i].MovementTurn(0)
+            self.MovementDone = True
+            rospy.sleep(0.1)
+            for i in range(self.robot_num):    
+                if  self.names['Dancer_%s'%i].current_stage_of_dance == self.names['Dancer_%s'%i].StateOfDance.idle.value:
+                    if self.MovementDone == True:
+                        self.MovementDone = True
+                else:
+                    self.MovementDone = False
+            if self.MovementDone:
+                break
+        # move foreword 0.5m
         while True:
             for i in range(self.robot_num):
                 if self.MovementDone == True:
@@ -197,6 +218,7 @@ class dance:
             if self.MovementDone:
                 break
         rospy.sleep(1)
+        # turn to 180 degree
         while True:
             for i in range(self.robot_num):
                 if self.MovementDone == True:
@@ -212,6 +234,7 @@ class dance:
             if self.MovementDone:
                 break
         rospy.sleep(1)
+        # move backword 0.5m
         while True:
             for i in range(self.robot_num):
                 if self.MovementDone == True:
@@ -227,10 +250,11 @@ class dance:
             if self.MovementDone:
                 break
         rospy.sleep(1)
+        # turn to 180 degree
         while True:
             for i in range(self.robot_num):
                 if self.MovementDone == True:
-                    self.names['Dancer_%s'%i].MovementStraight(1)
+                    self.names['Dancer_%s'%i].MovementTurn(3.1415)
             self.MovementDone = True
             rospy.sleep(0.1)
             for i in range(self.robot_num):    
@@ -242,6 +266,23 @@ class dance:
             if self.MovementDone:
                 break
         rospy.sleep(1)
+        # move forword 1.0m
+        while True:
+            for i in range(self.robot_num):
+                if self.MovementDone == True:
+                    self.names['Dancer_%s'%i].MovementStraight(1.0)
+            self.MovementDone = True
+            rospy.sleep(0.1)
+            for i in range(self.robot_num):    
+                if  self.names['Dancer_%s'%i].current_stage_of_dance == self.names['Dancer_%s'%i].StateOfDance.idle.value:
+                    if self.MovementDone == True:
+                        self.MovementDone = True
+                else:
+                    self.MovementDone = False
+            if self.MovementDone:
+                break
+        rospy.sleep(1)
+        #turn to 0 degree
         while True:
             for i in range(self.robot_num):
                 if self.MovementDone == True:

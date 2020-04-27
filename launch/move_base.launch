@@ -6,7 +6,7 @@
   <arg name="robot_name" default=""/>   <!-- support multi robot -->
   <arg name="odom_frame_id"   default="odom"/>
   <arg name="base_frame_id"   default="base_footprint"/>
-  <arg name="global_frame_id" default="/map"/>
+  <arg name="global_frame_id" default="map"/>
 
   <!-- move_base use DWA planner-->
   <group ns="$(arg robot_name)">
